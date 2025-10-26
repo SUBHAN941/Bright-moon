@@ -1,156 +1,147 @@
-import React, { useState } from "react";
-import { MapPin, Phone, Mail } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { MapPin, Users, Award, Trophy, Star, Sparkles, ChevronRight } from "lucide-react";
 import emailjs from "emailjs-com";
+import { useInView } from "framer-motion";
 
-export default function SchoolHero() {
+function Hero() {
+  const heroRef = useRef(null);
+  const heroInView = useInView(heroRef, { once: true });
+
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    grade: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", grade: "", message: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleApplyClick = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
+  const stats = [
+    { value: "2000+", label: "Students", color: "from-blue-500 to-cyan-500", icon: <Users size={24} /> },
+    { value: "100+", label: "Teachers", color: "from-purple-500 to-pink-500", icon: <Award size={24} /> },
+    { value: "95%", label: "Success Rate", color: "from-green-500 to-emerald-500", icon: <Trophy size={24} /> },
+    { value: "30+", label: "Years Legacy", color: "from-orange-500 to-red-500", icon: <Star size={24} /> },
+  ];
 
   // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
+  // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    // Replace these with your EmailJS keys
+    const serviceId = "service_dpihwq9";
+    const templateId = "template_7ax7w8g";
+    const publicKey = "CRSDtCgkpZKZWu3DA";
 
     emailjs
-      .send(
-        "service_dpihwq9", // ✅ your Service ID
-        "template_7ax7w8g", // ✅ your Template ID
-        {
-          name: formData.name,
-          email: formData.email,
-          grade: formData.grade,
-          message: formData.message,
-        },
-        "CRSDtCgkpZKZWu3DA" // ✅ your Public Key
-      )
+      .send(serviceId, templateId, formData, publicKey)
       .then(
-        (result) => {
-          alert("✅ Application sent successfully!");
+        (response) => {
+          alert("Application sent successfully!");
           setShowModal(false);
           setFormData({ name: "", email: "", grade: "", message: "" });
         },
         (error) => {
-          alert("❌ Failed to send. Please try again.");
-          console.error(error.text);
+          console.error("Failed to send email:", error);
+          alert("Failed to send application. Try again later.");
         }
-      );
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
-    <div className="overflow-x-hidden min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative">
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div id="home" className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden pt-20">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse -top-48 -left-48"></div>
+        <div className="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-700 top-1/2 right-0"></div>
+        <div className="absolute w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse delay-1000 -bottom-48 left-1/3"></div>
+      </div>
+
+      <div ref={heroRef} className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-6 text-center lg:text-left">
-            <div className="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-              Excellence in Education Since 1990
+          <div className={`space-y-6 text-center lg:text-left transition-all duration-1000 ${heroInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+            <div className="inline-block">
+              <span className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-blue-900 rounded-full text-sm font-bold shadow-lg animate-pulse">
+                <Sparkles className="inline mr-2" size={16} />
+                Excellence Since 1990
+              </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-              Bright Moon{" "}
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight">
+              <span className="block text-white mb-2">Bright Moon</span>
+              <span className="block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
                 Public High School
               </span>
             </h1>
 
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed px-2 sm:px-0">
-              Nurturing young minds and building tomorrow's leaders through quality education,
-              strong values, and holistic development.
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Nurturing young minds and building tomorrow's leaders through quality education, strong values, and holistic development.
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-3 text-gray-700">
-              <MapPin className="h-5 w-5 text-blue-600" />
-              <span className="text-sm sm:text-lg">Jhand Road, Mughalabad, Punjab</span>
+            <div className="flex items-center justify-center lg:justify-start gap-2 text-gray-300">
+              <MapPin className="text-yellow-400" size={20} />
+              <span>Jhand Road, Mughalabad, Punjab</span>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
               <button
-                onClick={handleApplyClick}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all"
+                onClick={() => setShowModal(true)}
+                className="group relative px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-blue-900 rounded-xl font-bold overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl"
               >
-                Apply Now
+                <span className="relative z-10 flex items-center justify-center">
+                  Apply Now
+                  <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </button>
-              <button className="bg-white text-blue-600 border-2 border-blue-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-all">
+              <button className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 rounded-xl font-bold hover:bg-white/20 transition-all duration-300">
                 Learn More
               </button>
             </div>
-
-            {/* Contact Info */}
-            <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center lg:justify-start gap-4 pt-6 border-t border-gray-200 mt-4">
-              <div className="flex items-center justify-center sm:justify-start gap-2">
-                <Phone className="h-5 w-5 text-blue-600" />
-                <span className="text-gray-700 text-sm sm:text-base">+92-XXX-XXXXXXX</span>
-              </div>
-              <div className="flex items-center justify-center sm:justify-start gap-2">
-                <Mail className="h-5 w-5 text-blue-600" />
-                <span className="text-gray-700 text-sm sm:text-base">
-                  info@brightmoonschool.edu.pk
-                </span>
-              </div>
-            </div>
           </div>
 
-          {/* Right Content */}
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm sm:max-w-md transform hover:scale-105 transition duration-300 relative">
-              <div className="absolute -top-4 -right-4 bg-gradient-to-br from-yellow-400 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+          {/* Principal Card */}
+          <div className={`relative transition-all duration-1000 delay-300 ${heroInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+            <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl transform hover:scale-105 transition-all duration-500">
+              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-blue-900 px-6 py-3 rounded-full text-sm font-bold shadow-lg animate-bounce">
                 Principal's Message
               </div>
 
-              <div className="w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-                  alt="Principal"
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-48 h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 p-1 shadow-xl">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center overflow-hidden">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                    alt="Principal"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
 
               <div className="text-center space-y-3">
-                <h3 className="text-2xl font-bold text-gray-800">Principal Name</h3>
-                <p className="text-blue-600 font-semibold text-base">M.Ed, B.Ed</p>
-                <p className="text-gray-600 italic text-sm sm:text-base px-2">
-                  "Education is the most powerful weapon which you can use to change the world.
-                  At Bright Moon, we are committed to shaping future leaders with knowledge,
-                  integrity, and compassion."
+                <h3 className="text-2xl font-bold text-white">Principal Name</h3>
+                <p className="text-yellow-400 font-semibold">M.Ed, B.Ed</p>
+                <p className="text-gray-300 italic leading-relaxed">
+                  "Education is the most powerful weapon which you can use to change the world. At Bright Moon, we shape future leaders with knowledge, integrity, and compassion."
                 </p>
               </div>
             </div>
-
-            {/* Background Circles */}
-            <div className="absolute -z-10 top-10 right-10 w-40 sm:w-72 h-40 sm:h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-            <div className="absolute -z-10 bottom-10 left-10 w-40 sm:w-72 h-40 sm:h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-1000"></div>
           </div>
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 sm:mt-20">
-          {[ 
-            { value: "2000+", label: "Students", color: "text-blue-600" },
-            { value: "100+", label: "Teachers", color: "text-indigo-600" },
-            { value: "95%", label: "Success Rate", color: "text-purple-600" },
-            { value: "30+", label: "Years Legacy", color: "text-pink-600" },
-          ].map((stat, i) => (
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 transition-all duration-1000 delay-500 ${heroInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+          {stats.map((stat, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition"
+              className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-500 hover:scale-110 cursor-pointer overflow-hidden"
             >
-              <div className={`text-3xl sm:text-4xl font-bold ${stat.color} mb-1`}>
-                {stat.value}
+              <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+              <div className="relative z-10 text-center space-y-2">
+                <div className="text-yellow-400 flex justify-center group-hover:scale-125 transition-transform duration-300">{stat.icon}</div>
+                <div className="text-4xl font-black text-white">{stat.value}</div>
+                <div className="text-gray-300 font-medium">{stat.label}</div>
               </div>
-              <div className="text-gray-600 font-medium text-sm sm:text-base">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -158,17 +149,15 @@ export default function SchoolHero() {
 
       {/* Apply Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl w-11/12 sm:w-96 p-6 relative animate-slide-up">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-8 w-96 relative">
             <button
-              onClick={handleClose}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold"
             >
-              ✕
+              X
             </button>
-            <h2 className="text-xl font-bold text-blue-700 mb-4 text-center">
-              Apply for Admission
-            </h2>
+            <h2 className="text-2xl font-bold mb-4">Apply Now</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -176,42 +165,59 @@ export default function SchoolHero() {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
+                required
               />
               <input
                 type="email"
                 name="email"
-                placeholder="Email Address"
+                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
+                required
               />
               <input
                 type="text"
                 name="grade"
-                placeholder="Grade / Class"
+                placeholder="Grade/Class"
                 value={formData.grade}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
+                required
               />
               <textarea
                 name="message"
-                placeholder="Message or Additional Info"
-                rows="3"
+                placeholder="Message"
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              ></textarea>
+                className="w-full border p-2 rounded"
+                required
+              />
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition"
+                className="w-full bg-blue-700 text-white py-2 rounded font-bold hover:bg-blue-800"
+                disabled={loading}
               >
-                Submit Application
+                {loading ? "Sending..." : "Submit"}
               </button>
             </form>
           </div>
         </div>
       )}
+
+      <style>{`
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
     </div>
   );
 }
+
+export default Hero;

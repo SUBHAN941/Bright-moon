@@ -1,138 +1,65 @@
-import React from 'react';
-import {
-  Award,
-  BookOpen,
-  Users,
-  Trophy,
-  Microscope,
-  Palette,
-  Globe,
-} from 'lucide-react';
+import React, { useRef } from 'react';
+import { useInView } from 'framer-motion';
+import { Award, BookOpen, Users, Trophy, Microscope, Palette, Globe } from 'lucide-react';
 
-export default function Services() {
+function Services() {
+  const servicesRef = useRef(null);
+  const servicesInView = useInView(servicesRef, { once: true });
+
   const services = [
-    {
-      icon: <BookOpen className="w-8 h-8" />,
-      title: 'Academic Excellence',
-      description:
-        'Comprehensive curriculum from elementary to high school with focus on STEM and humanities.',
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: 'Experienced Faculty',
-      description:
-        "Highly qualified teachers dedicated to nurturing each student's potential and growth.",
-    },
-    {
-      icon: <Microscope className="w-8 h-8" />,
-      title: 'Science Labs',
-      description:
-        'State-of-the-art laboratories for physics, chemistry, biology, and computer science.',
-    },
-    {
-      icon: <Palette className="w-8 h-8" />,
-      title: 'Arts & Culture',
-      description:
-        'Music, dance, drama, and visual arts programs to foster creativity and expression.',
-    },
-    {
-      icon: <Trophy className="w-8 h-8" />,
-      title: 'Sports Facilities',
-      description:
-        'Modern sports complex with facilities for cricket, football, basketball, and athletics.',
-    },
-    {
-      icon: <Globe className="w-8 h-8" />,
-      title: 'Global Exposure',
-      description:
-        'International exchange programs and global curriculum to prepare students for the world.',
-    },
+    { icon: <BookOpen size={32} />, title: "Academic Excellence", desc: "Comprehensive curriculum with focus on STEM and humanities.", color: "from-blue-500 to-cyan-500" },
+    { icon: <Users size={32} />, title: "Experienced Faculty", desc: "Highly qualified teachers dedicated to nurturing potential.", color: "from-purple-500 to-pink-500" },
+    { icon: <Microscope size={32} />, title: "Science Labs", desc: "State-of-the-art laboratories for all sciences.", color: "from-green-500 to-emerald-500" },
+    { icon: <Palette size={32} />, title: "Arts & Culture", desc: "Music, dance, drama, and visual arts programs.", color: "from-orange-500 to-red-500" },
+    { icon: <Trophy size={32} />, title: "Sports Facilities", desc: "Modern sports complex with multiple facilities.", color: "from-yellow-500 to-orange-500" },
+    { icon: <Globe size={32} />, title: "Global Exposure", desc: "International programs to prepare for the world.", color: "from-indigo-500 to-purple-500" }
   ];
 
   return (
-    <div className="overflow-x-hidden min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Award className="w-8 h-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                Excellence School
-              </span>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <section id="services" ref={servicesRef} className="py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
+      <div className="absolute inset-0">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-white rounded-full opacity-20 animate-pulse"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h1>
-          <p className="text-xl text-green-100 max-w-3xl mx-auto">
-            Comprehensive educational services designed to support every aspect
-            of student development
-          </p>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className={`text-center mb-16 transition-all duration-1000 ${servicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+          <h2 className="text-5xl font-black text-white mb-4">
+            Our <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Services</span>
+          </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-yellow-400 to-orange-500 mx-auto rounded-full mb-6"></div>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">Comprehensive educational services designed to support every aspect of student development</p>
         </div>
-      </section>
 
-      {/* Services Grid */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, i) => (
             <div
-              key={index}
-              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300"
+              key={i}
+              className={`group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-white/40 transition-all duration-500 transform hover:-translate-y-4 hover:scale-105 ${servicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+              style={{ transitionDelay: `${i * 100}ms` }}
             >
-              <div className="text-blue-600 mb-4">{service.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {service.title}
-              </h3>
-              <p className="text-gray-600">{service.description}</p>
+              <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-20 rounded-3xl transition-opacity duration-500`}></div>
+              <div className="relative z-10">
+                <div className={`inline-block p-4 bg-gradient-to-br ${service.color} rounded-2xl text-white mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-xl`}>
+                  {service.icon}
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
+                <p className="text-gray-300 leading-relaxed">{service.desc}</p>
+              </div>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Additional Services */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Additional Facilities
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                Library & Resources
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Extensive collection of books, digital resources, and quiet study
-                spaces for research and learning.
-              </p>
-              <ul className="space-y-2 text-gray-600">
-                <li>• Over 10,000 books and periodicals</li>
-                <li>• Digital library access</li>
-                <li>• Reading rooms and study areas</li>
-              </ul>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                Transport Services
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Safe and reliable transportation covering all major areas of the
-                city with GPS tracking.
-              </p>
-              <ul className="space-y-2 text-gray-600">
-                <li>• GPS-enabled buses</li>
-                <li>• Trained drivers and attendants</li>
-                <li>• Multiple routes across the city</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }
+export default Services
