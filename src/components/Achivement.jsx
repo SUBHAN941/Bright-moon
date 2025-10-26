@@ -9,7 +9,7 @@ function Achievements() {
 
   return (
     <section id="achievements" className="py-20 px-4 sm:px-6 bg-gradient-to-br from-blue-900 to-blue-800 text-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="overflow-x-hidden max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold text-center mb-4">Our Achievements</h2>
         <p className="text-center text-blue-100 mb-12 max-w-2xl mx-auto">
           Proud moments that showcase our commitment to excellence

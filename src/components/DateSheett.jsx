@@ -3,7 +3,7 @@ import { Download } from "lucide-react";
 function DateSheett() {
   return (
     <section id="datesheet" className="py-20 px-4 sm:px-6 bg-white">
-      <div className="max-w-3xl mx-auto text-center">
+      <div className="overflow-x-hidden max-w-3xl mx-auto text-center">
         <h2 className="text-4xl font-bold text-blue-900 mb-6">Examination Date Sheet</h2>
         <p className="text-gray-700 mb-8 text-lg">
           Download the latest examination date sheet for all classes. 

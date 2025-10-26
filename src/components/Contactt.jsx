@@ -3,7 +3,7 @@ import { MapPin, Mail, Phone } from "lucide-react"
 function Contactt() {
   return (
     <section id="contact" className="py-20 px-4 sm:px-6 bg-gradient-to-br from-blue-900 to-blue-800 text-white">
-      <div className="max-w-4xl mx-auto">
+      <div className="overflow-x-hidden max-w-4xl mx-auto">
         <h2 className="text-4xl font-bold text-center mb-12">Contact Us</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">

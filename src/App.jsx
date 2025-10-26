@@ -9,6 +9,8 @@ import Gallery  from "./components/Galerry";
 import DateSheet from "./components/DateSheett";
 import Contact from "./components/Contactt";
 import Footer from "./components/Footer"
+import SocialMedia from "./components/SocialMedia";
+
 import { Menu, X, Download, Mail, Phone, MapPin, Award, Users, BookOpen, Heart } from "lucide-react";
 
 export default function App() {
@@ -24,6 +26,7 @@ export default function App() {
       <Achievement />
       <Gallery />
       <DateSheet />
+      <SocialMedia/>
       <Contact />
       <Footer />
     </div>
