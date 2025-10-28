@@ -9,7 +9,6 @@ export default function SEO({ title, description, keywords, url }) {
       <Meta name="keywords" content={keywords} />
 
 <meta name="google-site-verification" content="E_ZBjzLGr06H79oOkP0fimni5ctJCCehZNxZqKRZ4oc" />
-
       {/* Open Graph */}
       <Meta property="og:title" content={title} />
       <Meta property="og:description" content={description} />
