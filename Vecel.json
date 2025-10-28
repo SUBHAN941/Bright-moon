@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "src": "/(sitemap\\.xml|robots\\.txt|google.*\\.html)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
