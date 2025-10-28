@@ -3,8 +3,8 @@ import { X, ZoomIn } from "lucide-react";
 import { useInView } from "framer-motion";
 
 function Gallery() {
-  const galleryRef = useRef(null);                // <-- create ref
-  const galleryInView = useInView(galleryRef, { once: true }); // <-- returns boolean
+const galleryRef = useRef(null);
+const galleryInView = useInView(galleryRef);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const images = [

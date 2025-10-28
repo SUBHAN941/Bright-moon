@@ -1,69 +1,50 @@
-import React from "react";
-function FemaleStaff() {
+import React, { useRef } from "react";
+import { useInView } from "framer-motion";
+
+function Staff() {
+  const staffRef = useRef(null);
+  const staffInView = useInView(staffRef, { once: true });
+
   const staff = [
-    {
-      name: "Ms. Fatima Ahmed",
-      position: "Head Teacher - Science Department",
-      qualification: "M.Sc. Physics, B.Ed",
-      experience: "12 years"
-    },
-    {
-      name: "Ms. Ayesha Khan",
-      position: "Senior Teacher - Mathematics",
-      qualification: "M.Sc. Mathematics, B.Ed",
-      experience: "10 years"
-    },
-    {
-      name: "Ms. Zainab Ali",
-      position: "English & Urdu Teacher",
-      qualification: "M.A. English Literature",
-      experience: "8 years"
-    },
-    {
-      name: "Ms. Sana Mahmood",
-      position: "Islamic Studies Teacher",
-      qualification: "M.A. Islamiat, Hifz-e-Quran",
-      experience: "9 years"
-    },
-    {
-      name: "Ms. Rabia Nasir",
-      position: "Primary Section Coordinator",
-      qualification: "B.Ed, Montessori Diploma",
-      experience: "7 years"
-    },
-    {
-      name: "Ms. Hina Tariq",
-      position: "Computer Science Teacher",
-      qualification: "B.Sc. Computer Science",
-      experience: "5 years"
-    }
+    { name: "Ms. Fatima Ahmed", position: "Head Teacher - Science", qualification: "M.Sc. Physics, B.Ed", experience: "12 years", initial: "F" },
+    { name: "Ms. Ayesha Khan", position: "Senior Teacher - Mathematics", qualification: "M.Sc. Mathematics, B.Ed", experience: "10 years", initial: "A" },
+    { name: "Ms. Zainab Ali", position: "English & Urdu Teacher", qualification: "M.A. English Literature", experience: "8 years", initial: "Z" },
+    { name: "Ms. Sana Mahmood", position: "Islamic Studies Teacher", qualification: "M.A. Islamiat, Hifz-e-Quran", experience: "9 years", initial: "S" },
+    { name: "Ms. Rabia Nasir", position: "Primary Coordinator", qualification: "B.Ed, Montessori", experience: "7 years", initial: "R" },
+    { name: "Ms. Hina Tariq", position: "Computer Science Teacher", qualification: "B.Sc. Computer Science", experience: "5 years", initial: "H" }
   ];
 
+  const colors = ["from-blue-500 to-cyan-500", "from-purple-500 to-pink-500", "from-green-500 to-emerald-500", "from-orange-500 to-red-500", "from-yellow-500 to-orange-500", "from-indigo-500 to-purple-500"];
+
   return (
-    <section id="staff" className="py-20 px-4 sm:px-6 bg-white">
-      <div className="overflow-x-hidden max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-blue-900 mb-4">Our Dedicated Female Staff</h2>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Meet our team of qualified and experienced female educators who are committed 
-          to providing the best education in a supportive environment
-        </p>
-        
+    <section id="staff" ref={staffRef} className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className={`text-center mb-16 transition-all duration-1000 ${staffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+          <h2 className="text-5xl font-black text-gray-900 mb-4">
+            Our Dedicated <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Staff</span>
+          </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full mb-6"></div>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">Meet our team of qualified educators committed to excellence</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {staff.map((member, index) => (
-            <div 
-              key={index} 
-              className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-blue-100"
+          {staff.map((member, i) => (
+            <div
+              key={i}
+              className={`group relative bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 overflow-hidden ${staffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+              style={{ transitionDelay: `${i * 100}ms` }}
             >
-              <div className="w-20 h-20 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white text-2xl font-bold">
-                  {member.name.split(' ')[1][0]}
-                </span>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-2 text-blue-900">{member.name}</h3>
-              <p className="text-center text-blue-700 font-semibold mb-3">{member.position}</p>
-              <div className="space-y-2 text-sm text-gray-600">
-                <p><strong>Qualification:</strong> {member.qualification}</p>
-                <p><strong>Experience:</strong> {member.experience}</p>
+              <div className={`absolute inset-0 bg-gradient-to-br ${colors[i]} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
+              <div className="relative z-10 text-center">
+                <div className={`w-24 h-24 mx-auto mb-4 bg-gradient-to-br ${colors[i]} rounded-full flex items-center justify-center text-white text-3xl font-black transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-xl`}>
+                  {member.initial}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                <p className={`font-semibold mb-4 bg-gradient-to-r ${colors[i]} bg-clip-text text-transparent`}>{member.position}</p>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p><strong>Qualification:</strong> {member.qualification}</p>
+                  <p><strong>Experience:</strong> {member.experience}</p>
+                </div>
               </div>
             </div>
           ))}
@@ -72,4 +53,4 @@ function FemaleStaff() {
     </section>
   );
 }
-export default FemaleStaff
+export default Staff

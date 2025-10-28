@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { MapPin, Users, Award, Trophy, Star, Sparkles, ChevronRight } from "lucide-react";
 import emailjs from "emailjs-com";
 import { useInView } from "framer-motion";
+import Swal from "sweetalert2"
 
 function Hero() {
   const heroRef = useRef(null);
@@ -34,19 +35,29 @@ function Hero() {
     const publicKey = "CRSDtCgkpZKZWu3DA";
 
     emailjs
-      .send(serviceId, templateId, formData, publicKey)
-      .then(
-        (response) => {
-          alert("Application sent successfully!");
-          setShowModal(false);
-          setFormData({ name: "", email: "", grade: "", message: "" });
-        },
-        (error) => {
-          console.error("Failed to send email:", error);
-          alert("Failed to send application. Try again later.");
-        }
-      )
-      .finally(() => setLoading(false));
+  .send(serviceId, templateId, formData, publicKey)
+  .then(
+    (response) => {
+      Swal.fire({
+        icon: "success",
+        title: "Application Sent!",
+        text: "Your application has been submitted successfully.",
+        confirmButtonColor: "#3085d6",
+      });
+      setShowModal(false);
+      setFormData({ name: "", email: "", grade: "", message: "" });
+    },
+    (error) => {
+      console.error("Failed to send email:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Failed to send your application. Please try again later.",
+        confirmButtonColor: "#d33",
+      });
+    }
+  )
+  .finally(() => setLoading(false));
   };
 
   return (
@@ -149,62 +160,76 @@ function Hero() {
 
       {/* Apply Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-8 w-96 relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold"
-            >
-              X
-            </button>
-            <h2 className="text-2xl font-bold mb-4">Apply Now</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <input
-                type="text"
-                name="grade"
-                placeholder="Grade/Class"
-                value={formData.grade}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <textarea
-                name="message"
-                placeholder="Message"
-                value={formData.message}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full bg-blue-700 text-white py-2 rounded font-bold hover:bg-blue-800"
-                disabled={loading}
-              >
-                {loading ? "Sending..." : "Submit"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
+    <div
+      className="relative bg-gradient-to-br from-white via-blue-50 to-purple-50 rounded-3xl p-8 w-full max-w-md shadow-2xl transform animate-scale-in border-4 border-white/20"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Decorative glowing blobs */}
+      <div className="absolute -top-2 -right-2 w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full blur-2xl opacity-50"></div>
+      <div className="absolute -bottom-2 -left-2 w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full blur-2xl opacity-50"></div>
+
+      {/* Close Button */}
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-4 right-4 w-10 h-10 bg-gradient-to-br from-red-500 to-pink-500 text-white rounded-full flex items-center justify-center hover:scale-110 transform transition-all duration-300 shadow-lg font-bold text-lg z-10"
+      >
+        ✕
+      </button>
+
+      {/* Modal Content */}
+      <h2 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        Apply Now
+      </h2>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+          required
+        />
+        <input
+          type="text"
+          name="grade"
+          placeholder="Grade/Class"
+          value={formData.grade}
+          onChange={handleChange}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+          required
+        />
+        <textarea
+          name="message"
+          placeholder="Message"
+          value={formData.message}
+          onChange={handleChange}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all h-28"
+          required
+        />
+        <button
+          type="submit"
+          className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold hover:from-purple-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:scale-105"
+          disabled={loading}
+        >
+          {loading ? "Sending..." : "Submit"}
+        </button>
+      </form>
+    </div>
+  </div>
+)}
+
 
       <style>{`
         @keyframes gradient {
